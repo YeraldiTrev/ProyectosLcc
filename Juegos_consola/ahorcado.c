@@ -20,6 +20,7 @@ int seleccion()
     srand(time(NULL));
     int num,i;
     num=rand()%(MAX-MIN)+MIN;
+    if(num>MAX) seleccion();
     return num;
 }
 
