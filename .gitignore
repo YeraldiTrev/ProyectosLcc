@@ -1,6 +1,7 @@
-#Carpetas a ignorar
+#Carpetas.
 \.vscode
 
-# Extensiones a ignorar 
+# Extensiones. 
 *.exe
 *.pdf
+*.docx
