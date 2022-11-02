@@ -32,52 +32,54 @@ int userValidation(int tries)
     FILE *usersBin;
     char user[30],pass[30];
 
-    if(tries<=0) return 0;
-    /* User and password input */
-    printf("Usuario: ");
-    scanf("%s",user);
-    fflush(stdin);
-    printf("Contrase%ca: ",164);
-    scanf("%s", pass);
-
-    /* User validation */
-    for(j=0;j<USERS;j++)
+    while(tries>0)
     {
-        if(strcmp(user,users[j].userName)==0)   
-            break;
-    }
+        /* User and password input */
+        printf("Usuario: ");
+        scanf("%s",user);
+        fflush(stdin);
+        printf("Contrase%ca: ",164);
+        scanf("%s", pass);
 
-    /* Password and status validation */
-    if(strcmp(pass,users[j].password)==0)
-    {
-        if(users[j].status)
-            return 1;
+        /* User validation */
+        for(j=0;j<USERS;j++)
+        {
+            if(strcmp(user,users[j].userName)==0)   
+                break;
+        }
+
+        /* Password and status validation */
+        if(strcmp(pass,users[j].password)==0)
+        {
+            if(users[j].status)
+                return 1;
+            else
+            {
+                printf("El usuario esta inactivo...\n");
+                system("pause");
+                continue;
+            }
+        }   
         else
         {
-            printf("El usuario esta inactivo...\n");
-            return 0;
+            tries--;
+            printf("\nContrase%ca o usuario incorrecto...\n",164);
+            system("pause");
+            system("clear");
+            if(tries<=0)
+            {
+                /* disable user */
+                printf("Usuario bloqueado. Favor de contactar a soporte tecnio...\n");
+                users[j].status=0;
+                usersBin=fopen("Usuarios.bin","wb");
+                fwrite(users,sizeof(Users),USERS,usersBin);
+                fclose(usersBin);
+                return 0;
+            }
+            continue; 
         }
-    }   
-    else
-    {
-        tries--;
-        printf("\nContrase%ca o usuario incorrecto...\n",164);
-        system("pause");
-        system("clear");
-        if(tries<=0)
-        {
-            /* disable user */
-            printf("Usuario bloqueado. Favor de contactar a soporte tecnio...\n");
-            users[j].status=0;
-            usersBin=fopen("Usuarios.bin","wb");
-            fwrite(users,sizeof(Users),USERS,usersBin);
-            fclose(usersBin);
-            return 0;
-        }
-        userValidation(tries); 
-        
     }
-    return 0;
+    return 1;
 }
 
 void activateUser()

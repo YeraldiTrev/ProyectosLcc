@@ -20,17 +20,6 @@ int main()
     /* Load information files */
     loadUsers();
     loadClients();
-
-    printf("Total clientes: %d\n",totalClients);
-    for(i=0;i<totalClients;i++)
-    {
-        printf("ID: %d\n",clients[i].id);
-        printf("Nombre: %s\n",clients[i].name);
-        printf("Correo: %s\n",clients[i].email);
-
-    }
-    system("pause");
-    system("clear");
     validation = userValidation(TRIES);
 
     while(opc!='6'&& validation)
@@ -46,9 +35,12 @@ int main()
         case '1':
             do
             {
+                system("clear");
                 opc=tolower(subMenu());
                 if(opc=='1')
                     newClient();
+                else if(opc=='2')
+                    disableClient();
                 else
                     break;
             }while(1);

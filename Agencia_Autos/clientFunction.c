@@ -21,7 +21,8 @@ typedef struct
 struct Client
 {
     int id;
-    char name[120];
+    char name[60];
+    char lastname[60];
     char email[40];
     char phoneNum[10];
     Domicilio home;
@@ -48,7 +49,7 @@ void newClient()
     clients[totalClients].id=totalClients+1;
     fflush(stdin);
     printf("Ingresa el nombre completo: ");
-    gets(clients[totalClients].name);
+    scanf("%s %s",clients[totalClients].name,clients[totalClients].lastname);
     fflush(stdin);
     printf("Ingresa el correo: ");
     scanf("%s",clients[totalClients].email);
@@ -72,6 +73,72 @@ void newClient()
     totalClients++;
 }
 
+/* Disable client */
+void disableClient()
+{
+    char name[60];
+    char lastname[60];
+    int id,finded=0;
+    system("clear");
+    printf("Ingrese parte del nombre o el nombre completo: ");
+    scanf("%s %s",name,lastname);
+    for(i=0;i<totalClients;i++)
+    {
+        if(strcmp(name,clients[i].name)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+        }
+        else if(strcmp(lastname,clients[i].lastname)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+
+        }
+        else if(strcmp(name,clients[i].lastname)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+        }
+        else if(strcmp(lastname,clients[i].name)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+        }
+    }
+
+    if(finded>0)
+    {
+        printf("\nIngresa el Id: ");
+        scanf("%d",&id);
+        for(i=0;i<totalClients;i++)
+        {
+            if(id==clients[i].id)
+            {
+                if(clients[i].status==0)
+                {
+                    printf("El cliente ya estaba deshabilitado...\n");
+                    system("pause");
+                    system("clear");
+                }
+                else
+                {
+                    clients[i].status=0;
+                    printf("Cliente deshabilitado...\n");
+                    system("pause");
+                    system("clear");
+                }
+            }
+        }
+    }
+    else
+    {
+        printf("\nNo se encontraron coincidencias...\n");
+        system("pause");
+        system("clear");
+    }
+}
+
 void loadToFileClients()
 {
     FILE *clientsBin;
@@ -83,3 +150,17 @@ void loadToFileClients()
     fwrite(&totalClients,sizeof(int),1,clientsBin);
     fclose(clientsBin);
 }
+
+/*
+    Users registered list 
+    printf("Total clientes: %d\n",totalClients);
+        for(i=0;i<totalClients;i++)
+        {
+            printf("ID: %d\n",clients[i].id);
+            printf("Nombre: %s\n",clients[i].name);
+            printf("Correo: %s\n",clients[i].email);
+
+        }
+        system("pause");
+        system("clear");
+*/
