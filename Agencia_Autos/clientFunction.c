@@ -6,7 +6,7 @@
 
 /* Global variables and constants */
 #define CLIENTS 100
-int totalClients=0;
+int totalClients=0,i;
 
 /* Strctures */
 
@@ -152,7 +152,7 @@ void loadToFileClients()
 }
 
 /*
-    Users registered list 
+    Generate users registered list 
     printf("Total clientes: %d\n",totalClients);
         for(i=0;i<totalClients;i++)
         {
