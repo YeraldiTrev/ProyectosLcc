@@ -133,6 +133,7 @@ void loadCarsToFile()
     fclose(carsBin);
 }
 
+/*
 void carsList()
 {
     printf("Total de Carros: %d\n",totalCars);
@@ -150,3 +151,4 @@ void carsList()
     system("pause");
     system("clear");
 }
+*/
