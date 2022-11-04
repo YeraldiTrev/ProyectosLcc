@@ -80,7 +80,8 @@ void disableClient()
     char lastname[60];
     int id,finded=0;
     system("clear");
-    printf("Ingrese parte del nombre o el nombre completo: ");
+    printf("Ingrese el nombre y/o apellido ");
+    printf("(Ingrese un espacio y punto si solo ingresa uno de los 2): ");
     scanf("%s %s",name,lastname);
     for(i=0;i<totalClients;i++)
     {
@@ -154,13 +155,12 @@ void loadToFileClients()
 /*
     Generate users registered list 
     printf("Total clientes: %d\n",totalClients);
-        for(i=0;i<totalClients;i++)
-        {
-            printf("ID: %d\n",clients[i].id);
-            printf("Nombre: %s\n",clients[i].name);
-            printf("Correo: %s\n",clients[i].email);
-
-        }
-        system("pause");
-        system("clear");
+    for(i=0;i<totalClients;i++)
+    {
+        printf("ID: %d\n",clients[i].id);
+        printf("Nombre: %s\n",clients[i].name);
+        printf("Correo: %s\n",clients[i].email);
+    }
+    system("pause");
+    system("clear");
 */

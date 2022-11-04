@@ -6,6 +6,7 @@
 #include "usersFunction.c"
 #include "menuFunctions.c"
 #include "clientFunction.c"
+#include "carsFunctions.c"
 
 
 /* Constants and global variables */
@@ -15,11 +16,12 @@
 int main()
 {
     int validation,i;
-    char opc='a';
+    char opc=' ';
     system("clear");
     /* Load information files */
     loadUsers();
     loadClients();
+    loadCars();
     validation = userValidation(TRIES);
 
     while(opc!='6'&& validation)
@@ -50,7 +52,7 @@ int main()
             {
                 opc=tolower(subMenu());
                 if(opc=='1')
-                    break;
+                    newCar();
                 else
                     break;
             }while(1);
@@ -72,8 +74,7 @@ int main()
         }
     }
     loadToFileClients();
-    printf("Gracias por usar el software de agencias Yera :D\n");
-
-    
+    loadCarsToFile();
+    printf("Gracias por usar el software de agencias Yera :D\n"); 
     return 0;
 }
