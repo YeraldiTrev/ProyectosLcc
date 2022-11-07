@@ -4,7 +4,7 @@
 #include <string.h>
 
 /* Global variables and constants */
-#define USERS 3
+#define USERS 4
 int i,j;
 
 /* Users structure */

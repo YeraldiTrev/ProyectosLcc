@@ -10,7 +10,7 @@
 
 
 /* Constants and global variables */
-#define USERS 3
+#define USERS 4
 #define TRIES 3
 
 int main()
