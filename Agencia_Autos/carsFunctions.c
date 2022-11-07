@@ -121,6 +121,70 @@ void newCar()
     totalCars++;
 }
 
+
+void disableCar()
+{
+    int clvCar;
+    char opc;
+    do
+    {
+        system("clear");        
+        printf("Ingrese la clave del vehiculo: ");
+        scanf("%d", &clvCar);
+        for(i=0;i<totalCars;i++)
+        {
+            if(clvCar==cars[i].id)
+            {
+                if(cars[i].status==1)
+                {
+                    do
+                    {
+                        printf("Presione 1 para confirmar o 0 para cancelar: ");
+                        fflush(stdin);
+                        scanf("%c",&opc);
+                        if(opc!='1'&&opc!='0')
+                        {
+                            printf("Ingrese una opcion valida...\n");
+                            system("pause");
+                            system("clear");
+                            continue;
+                        }
+                        break;
+                    }while(1);
+                    if(opc=='1')
+                    {
+                        cars[i].status=0;
+                        printf("El vehiculo se a dado de baja...\n");
+                        system("pause");
+                        system("clear");
+                        return;
+                    }
+                    else
+                    {
+                        printf("\nVolviendo al sub-Menu...\n");
+                        system("pause");
+                        system("clear");
+                        return;
+                    }
+                }
+                else
+                {
+                    printf("Este vehiculo ya esta dado de baja...\n");
+                    system("pause");
+                    system("clear");
+                    return;
+                }
+            }
+        }
+        printf("Clave del vehiculo no encontrada...\n");
+        printf("Ingrese 1 para intentar de nuevo o 0 para regresar al menu: ");
+        fflush(stdin);
+        scanf("%c",&opc);
+        if(opc!='1')
+            break;
+    }while(1);
+}
+
 void loadCarsToFile()
 {
     FILE *carsBin;

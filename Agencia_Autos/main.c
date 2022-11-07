@@ -18,10 +18,12 @@ int main()
     int validation,i;
     char opc=' ';
     system("clear");
+
     /* Load information files */
     loadUsers();
     loadClients();
     loadCars();
+
     validation = userValidation(TRIES);
 
     while(opc!='6'&& validation)
@@ -53,6 +55,8 @@ int main()
                 opc=tolower(subMenu());
                 if(opc=='1')
                     newCar();
+                else if (opc=='2')
+                    disableCar();
                 else
                     break;
             }while(1);
