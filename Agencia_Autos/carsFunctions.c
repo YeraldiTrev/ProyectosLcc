@@ -210,6 +210,9 @@ void carsList()
         printf("     ");(cars[i].transmission==1)?printf("Estandar  "):printf("Automatico");
         printf("   %5s","");(cars[i].kidOfCar==1)?printf("Nuevo     \n"):printf("Semi-Usado\n");
     }
-    system("pause");
-    system("clear");
+}
+
+void ableCar(int carId)
+{
+    cars[carId].status=1;
 }

@@ -166,3 +166,8 @@ void clientsLists()
     system("pause");
     system("clear");
 }
+
+void ableClient(int clientId)
+{
+    clients[clientId].status=1;
+}

@@ -83,6 +83,9 @@ int main()
                 case '2':
                     carsList();
                 default:
+                    printf("Favor de ingresar una opcion del menu...\n");
+                    system("pause");
+                    system("clear");
                     break;
                 }
             }while(opc!='4');

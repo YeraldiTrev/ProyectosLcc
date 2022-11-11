@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "usersFunction.c"
+#include "clientFunction.c"
+#include "carsFunctions.c"
+
 
 int main()
 {   
