@@ -167,6 +167,7 @@ void disableCar()
                         printf("El vehiculo se a dado de baja...\n");
                         system("pause");
                         system("clear");
+                        saveCars();
                         return;
                     }
                     else
@@ -193,7 +194,6 @@ void disableCar()
         if(opc!='1')
             break;
     }while(1);
-    saveCars();
 }
 
 void carsList()
