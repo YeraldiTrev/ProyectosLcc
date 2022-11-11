@@ -32,11 +32,8 @@ void loadCars()
 {
     FILE *carsBin;
     carsBin=fopen("Vehiculos.bin","rb");
-    fread(cars,sizeof(Cars),CARS,carsBin);
-    fclose(carsBin);
-
-    carsBin=fopen("totalCars.bin","rb");
     fread(&totalCars,sizeof(int),1,carsBin);
+    fread(cars,sizeof(Cars),CARS,carsBin);
     fclose(carsBin);
 }
 
@@ -185,19 +182,18 @@ void disableCar()
     }while(1);
 }
 
-void loadCarsToFile()
+void saveCars()
 {
     FILE *carsBin;
     carsBin=fopen("Vehiculos.bin","wb");
-    fwrite(cars,sizeof(Cars),CARS,carsBin);
+    fwrite(&totalCars,sizeof(int),1,carsBin);
     fclose(carsBin);
 
-    carsBin=fopen("totalCars.bin","wb");
-    fwrite(&totalCars,sizeof(int),1,carsBin);
+    carsBin=fopen("Vehiculos.bin","ab");
+    fwrite(cars,sizeof(Cars),CARS,carsBin);
     fclose(carsBin);
 }
 
-/*
 void carsList()
 {
     printf("Total de Carros: %d\n",totalCars);
@@ -215,4 +211,3 @@ void carsList()
     system("pause");
     system("clear");
 }
-*/

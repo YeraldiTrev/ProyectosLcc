@@ -5,8 +5,9 @@
 #include <ctype.h>
 #include "usersFunction.c"
 #include "menuFunctions.c"
-#include "clientFunction.c"
-#include "carsFunctions.c"
+#include "quotationFunctions.c"
+/*#include "clientFunction.c"
+#include "carsFunctions.c"*/
 
 
 /* Constants and global variables */
@@ -23,7 +24,9 @@ int main()
     loadUsers();
     loadClients();
     loadCars();
-
+    loadQuotes();
+    
+    /* Login */
     validation = userValidation(TRIES);
 
     while(opc!='6'&& validation)
@@ -77,8 +80,9 @@ int main()
             break;
         }
     }
-    loadToFileClients();
-    loadCarsToFile();
+    saveClients();
+    saveCars();
+    loadQuotesToFile();
     printf("Gracias por usar el software de agencias Yera :D\n"); 
     return 0;
 }

@@ -35,11 +35,8 @@ void loadClients()
 {
     FILE *clientsBin;
     clientsBin=fopen("Clientes.bin","rb");
-    fread(clients,sizeof(Client),CLIENTS,clientsBin);
-    fclose(clientsBin);
-
-    clientsBin=fopen("totalClientes.bin","rb");
     fread(&totalClients,sizeof(int),1,clientsBin);
+    fread(clients,sizeof(Client),CLIENTS,clientsBin);
     fclose(clientsBin);
 }
 
@@ -70,6 +67,7 @@ void newClient()
     printf("\tIngresa el codigo postal: ");
     scanf("%d",&clients[totalClients].home.cp);
     fflush(stdin);
+    clients[totalClients].status=1;
     totalClients++;
 }
 
@@ -140,20 +138,19 @@ void disableClient()
     }
 }
 
-void loadToFileClients()
+void saveClients()
 {
     FILE *clientsBin;
     clientsBin=fopen("Clientes.bin","wb");
-    fwrite(clients,sizeof(Client),CLIENTS,clientsBin);
-    fclose(clientsBin);
-
-    clientsBin=fopen("totalClientes.bin","wb");
     fwrite(&totalClients,sizeof(int),1,clientsBin);
+    fclose(clientsBin);
+    clientsBin=fopen("Clientes.bin","ab");
+    fwrite(clients,sizeof(Client),CLIENTS,clientsBin);
     fclose(clientsBin);
 }
 
-/*
-    Generate users registered list 
+void clientsLists()
+{
     printf("Total clientes: %d\n",totalClients);
     for(i=0;i<totalClients;i++)
     {
@@ -163,4 +160,4 @@ void loadToFileClients()
     }
     system("pause");
     system("clear");
-*/
+}
