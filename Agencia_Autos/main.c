@@ -25,18 +25,18 @@ int main()
     loadClients();
     loadCars();
     loadQuotes();
-    
     /* Login */
     validation = userValidation(TRIES);
 
     while(opc!='6'&& validation)
     {
+        fflush(stdin);
         system("clear");
         printf("1. Clientes.\n2. Autos.\n3. Cotizacion.\n");
         printf("4. Reportes.\n5. Reactivar usuario.\n");
         printf("6. Salir.\nSelecciona una opcion: ");
-        fflush(stdin);
         scanf("%c",&opc);
+        fflush(stdin);
         switch (opc)
         {
         case '1':
@@ -67,6 +67,26 @@ int main()
         case '3':
             break;
         case '4':
+            do
+            {
+                system("clear");
+                printf("1. Listado de clientes.\n2. Listado de Vehiculos.\n");
+                printf("3. Reimprimir Cotizacion.\n4. Regresar al menu principal.\n");
+                printf("Selecciona una opcion: ");
+                scanf("%c",&opc);
+                fflush(stdin);
+                switch (opc)
+                {
+                case '1':
+                    clientsLists();
+                    break;
+                case '2':
+                    carsList();
+                default:
+                    break;
+                }
+            }while(opc!='4');
+            
             break;
         case '5':
             activateUser();
@@ -80,9 +100,7 @@ int main()
             break;
         }
     }
-    saveClients();
-    saveCars();
-    loadQuotesToFile();
+    saveQuotes();
     printf("Gracias por usar el software de agencias Yera :D\n"); 
     return 0;
 }

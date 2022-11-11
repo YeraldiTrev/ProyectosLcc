@@ -6,8 +6,8 @@
 
 int totalCars=0,i;
 /* Makes and Models Cars */
-char makes[4][120]={"Honda","Nissan","Ford","Chevrolet"};
-char models[4][4][120]={
+char makes[4][10]={"Honda","Nissan","Ford","Chevrolet"};
+char models[4][4][13]={
     {"CR-v","Pilot","Civic","Accord"},
     {"Xtrail","Sentra","Frontier","Altima"},
     {"Mustang","Explorer","Expedition","Lobo"},
@@ -34,6 +34,18 @@ void loadCars()
     carsBin=fopen("Vehiculos.bin","rb");
     fread(&totalCars,sizeof(int),1,carsBin);
     fread(cars,sizeof(Cars),CARS,carsBin);
+    fclose(carsBin);
+}
+
+void saveCars()
+{
+    FILE *carsBin;
+    carsBin=fopen("Vehiculos.bin","wb");
+    fwrite(&totalCars,sizeof(int),1,carsBin);
+    fclose(carsBin);
+
+    carsBin=fopen("Vehiculos.bin","ab");
+    fwrite(cars,sizeof(Cars),CARS,carsBin);
     fclose(carsBin);
 }
 
@@ -116,6 +128,7 @@ void newCar()
     /*Estatus del carro por defecto es activo (1)*/
     cars[totalCars].status=1;
     totalCars++;
+    saveCars();
 }
 
 
@@ -180,33 +193,22 @@ void disableCar()
         if(opc!='1')
             break;
     }while(1);
-}
-
-void saveCars()
-{
-    FILE *carsBin;
-    carsBin=fopen("Vehiculos.bin","wb");
-    fwrite(&totalCars,sizeof(int),1,carsBin);
-    fclose(carsBin);
-
-    carsBin=fopen("Vehiculos.bin","ab");
-    fwrite(cars,sizeof(Cars),CARS,carsBin);
-    fclose(carsBin);
+    saveCars();
 }
 
 void carsList()
 {
-    printf("Total de Carros: %d\n",totalCars);
+    printf("\t\tListado de Alojamiento\n\n");
+    printf(" ID \t Marca %5sSub-Marca  Modelo","");
+    printf("   Transmision   Estado del Vehiculo\n");
     for(i=0;i<totalCars;i++)
     {
-        printf("*************** ID: %05d ***************\n",cars[i].id);
-        printf("ID y marca: %d %s\n",cars[i].idMake,makes[cars[i].idMake]);
-        printf("ID y sub-marca: %d %s\n",cars[i].idModel,models[cars[i].idMake][cars[i].idModel]);
-        printf("Tipo de carro: ");(cars[i].kidOfCar==1)?printf("Nuevo\n"):printf("Semi-Usado\n");
-        printf("Modelo: %4d\n",cars[i].year);
-        printf("Precio de lista : $%.2f\n",cars[i].listprice);
-        printf("Tipo de Transmision: ");(cars[i].transmission==1)?printf("Estandar\n"):printf("Automatico\n");
-        printf("Estatus :%d\n",cars[i].status);
+        if(cars[i].status==0)
+            continue;
+        printf("%04d\t %-10s ",cars[i].id,makes[cars[i].idMake]);
+        printf("%-10s  %4d",models[cars[i].idMake][cars[i].idModel],cars[i].year);
+        printf("     ");(cars[i].transmission==1)?printf("Estandar  "):printf("Automatico");
+        printf("   %5s","");(cars[i].kidOfCar==1)?printf("Nuevo     \n"):printf("Semi-Usado\n");
     }
     system("pause");
     system("clear");

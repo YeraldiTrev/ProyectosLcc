@@ -53,20 +53,19 @@ void loadQuotes()
     fread(&totalQuotes,sizeof(int),1,quotesBin);    
     fclose(quotesBin);
 
-    quotesBin=fopen("Cotizaciones.bin","ab");
+    quotesBin=fopen("Cotizaciones.bin","rb");
     fread(quotes,sizeof(Quotation),QUOTES,quotesBin);
     fclose(quotesBin);
 }
 
-void loadQuotesToFile()
+void saveQuotes()
 {
     FILE *quotesBin;
     quotesBin=fopen("Cotizaciones.bin","wb");
-    fwrite(quotes,sizeof(Quotation),QUOTES,quotesBin);
-    fclose(quotesBin);
-
-    quotesBin=fopen("totalCotizaciones.bin","wb");
     fwrite(&totalQuotes,sizeof(int),1,quotesBin);
+    fclose(quotesBin);
+    quotesBin=fopen("Cotizaciones.bin","ab");
+    fwrite(quotes,sizeof(Quotation),QUOTES,quotesBin);
     fclose(quotesBin);
 }
 

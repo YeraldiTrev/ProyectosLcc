@@ -40,6 +40,17 @@ void loadClients()
     fclose(clientsBin);
 }
 
+void saveClients()
+{
+    FILE *clientsBin;
+    clientsBin=fopen("Clientes.bin","wb");
+    fwrite(&totalClients,sizeof(int),1,clientsBin);
+    fclose(clientsBin);
+    clientsBin=fopen("Clientes.bin","ab");
+    fwrite(clients,sizeof(Client),CLIENTS,clientsBin);
+    fclose(clientsBin);
+}
+
 void newClient()
 {
     system("clear");
@@ -69,6 +80,7 @@ void newClient()
     fflush(stdin);
     clients[totalClients].status=1;
     totalClients++;
+    saveClients();
 }
 
 /* Disable client */
@@ -136,28 +148,21 @@ void disableClient()
         system("pause");
         system("clear");
     }
-}
-
-void saveClients()
-{
-    FILE *clientsBin;
-    clientsBin=fopen("Clientes.bin","wb");
-    fwrite(&totalClients,sizeof(int),1,clientsBin);
-    fclose(clientsBin);
-    clientsBin=fopen("Clientes.bin","ab");
-    fwrite(clients,sizeof(Client),CLIENTS,clientsBin);
-    fclose(clientsBin);
+    saveClients();
 }
 
 void clientsLists()
 {
-    printf("Total clientes: %d\n",totalClients);
+    printf(" ID \t    Nombre \t  Correo   \t\t Telefono\n");
     for(i=0;i<totalClients;i++)
     {
-        printf("ID: %d\n",clients[i].id);
-        printf("Nombre: %s\n",clients[i].name);
-        printf("Correo: %s\n",clients[i].email);
+        if(clients[i].status)
+        {
+            printf("%04d \t%s %s  ",clients[i].id,clients[i].name,clients[i].lastname);
+            printf("%s\t%s\n",clients[i].email,clients[i].phoneNum);
+        }
     }
+    printf("\n");
     system("pause");
     system("clear");
 }
