@@ -65,6 +65,7 @@ int main()
             }while(1);
             break;
         case '3':
+            quotation();
             break;
         case '4':
             do
@@ -103,7 +104,6 @@ int main()
             break;
         }
     }
-    saveQuotes();
     printf("Gracias por usar el software de agencias Yera :D\n"); 
     return 0;
 }
