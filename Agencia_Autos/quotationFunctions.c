@@ -10,7 +10,7 @@
 #define QUOTES 100
 #define ENGAGE 0.28985507246376811594202898550725
 #define INSURERS 3
-#define CAT 0.16;
+const float CAT=0.16;
 int totalQuotes=0;
 int periods[8]={72,60,48,36,30,24,18,12};
 char *dateFormat="%d-%m-%Y";
@@ -38,6 +38,7 @@ typedef struct Price
 struct Quotation
 {
     int id;
+    int idCar;
     int clientId;
     int idMake;
     int idModel;
@@ -57,10 +58,8 @@ void loadQuotes()
 {
     FILE *quotesBin;
     quotesBin=fopen("Cotizaciones.bin","rb");
-    fread(&totalQuotes,sizeof(int),1,quotesBin);    
-    fclose(quotesBin);
+    fread(&totalQuotes,sizeof(int),1,quotesBin);
 
-    quotesBin=fopen("Cotizaciones.bin","rb");
     fread(quotes,sizeof(Quotation),QUOTES,quotesBin);
     fclose(quotesBin);
 }
@@ -89,7 +88,7 @@ void quotation()
         do
         { 
             system("clear");
-            printf("Ingresa la clave del cliente:");
+            printf("Ingresa la clave del cliente: ");
             scanf("%d",&quotes[totalQuotes].clientId);
             for(i=0;i<totalClients;i++)
             {
@@ -149,6 +148,7 @@ void quotation()
                 if((cars[i].status)&&(cars[i].idMake==marca)&&(cars[i].id==carro))
                 {
                     selected=i;
+                    quotes[totalQuotes].idCar=carro;
                     quotes[totalQuotes].idMake=marca;
                     quotes[totalQuotes].idModel=cars[selected].idModel;
                     quotes[totalQuotes].kindOfCar=cars[selected].kidOfCar;
@@ -236,4 +236,40 @@ void quotation()
     totalQuotes++;
     saveQuotes();
     system("pause");
+}
+
+void quotationReport(int id)
+{
+    id--;
+    float saldoRestante,mensualidad,interes,iva;
+    printf("Cotizacion:        %0.5d\n",quotes[id].id);
+    printf("Cliente:           %0.5d\t\t    %s %s\n"
+    ,quotes[id].clientId,clients[quotes[id].clientId-1].name,clients[quotes[id].clientId-1].lastname);
+    printf("Marca Vehiculo:    %s\t\t    Submarca: %s\n",
+    makes[quotes[id].idMake],models[quotes[id].idMake][quotes[id].idModel]);
+    printf("Antiguedad:        ");
+    (cars[quotes[id].idCar-1].kidOfCar==1)?printf("Nuevo     \t "):printf("Semi-Usado\t ");
+    printf("\t    Modelo:   %d\n",quotes[id].year);
+    printf("Precio Lista:      $%.2f\n",(quotes[id].pay.restPrice+quotes[id].pay.engage));
+    printf("Enganche:          $%.2f  %.2f%c\t    ",quotes[id].pay.engage,ENGAGE*100,37);
+    printf("Plazo:    %0.2d meses\n",quotes[id].pay.period);
+    printf("Monto a Financiar: $%.2f\n\n",quotes[id].totalPay);
+    saldoRestante=quotes[id].totalPay;
+    mensualidad=(quotes[id].totalPay/quotes[id].pay.period);
+    
+    printf("Pago  Saldo Auto   Mensualidad  \tInteres      IVA\t");
+    printf("Monto a Pagar\n");
+    for(i=0;i<80;i++)
+        printf("%c",196);
+    printf("\n");
+    for (i=1;i<=quotes[id].pay.period;i++)
+    {
+        interes=((saldoRestante*CAT)/12);
+        iva=interes*0.16;
+        printf("%4d  $  %9.2f   $ %9.2f   ",i,saldoRestante,mensualidad);
+        printf("$ %9.2f   $%9.2f\t",interes,iva);
+        printf("%9.2f\n",mensualidad+interes+iva);
+        saldoRestante-=mensualidad;
+    }
+    
 }

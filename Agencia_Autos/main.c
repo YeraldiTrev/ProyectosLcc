@@ -25,6 +25,8 @@ int main()
     loadClients();
     loadCars();
     loadQuotes();
+    quotationReport(1);
+    system("pause");
     /* Login */
     validation = userValidation(TRIES);
 
