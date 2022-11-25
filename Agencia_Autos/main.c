@@ -25,8 +25,6 @@ int main()
     loadClients();
     loadCars();
     loadQuotes();
-    quotationReport(1);
-    system("pause");
     /* Login */
     validation = userValidation(TRIES);
 
@@ -73,15 +71,17 @@ int main()
             do
             {
                 system("clear");
+                fflush(stdin);
                 printf("1. Listado de clientes.\n2. Listado de Vehiculos.\n");
                 printf("3. Reimprimir Cotizacion.\n4. Regresar al menu principal.\n");
                 printf("Selecciona una opcion: ");
                 scanf("%c",&opc);
                 fflush(stdin);
+                opc=tolower(opc);
                 switch (opc)
                 {
                 case '1':
-                    clientsLists();
+                    clientsQuotes();
                     break;
                 case '2':
                     carsList();

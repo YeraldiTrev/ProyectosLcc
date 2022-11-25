@@ -14,6 +14,7 @@ const float CAT=0.16;
 int totalQuotes=0;
 int periods[8]={72,60,48,36,30,24,18,12};
 char *dateFormat="%d-%m-%Y";
+
 /*Struct Quotation*/
 struct Insurer
 {
@@ -54,6 +55,8 @@ struct Quotation
 typedef struct Quotation Quotation;
 
 /* quote function*/
+void quotationReport(int id);
+
 void loadQuotes()
 {
     FILE *quotesBin;
@@ -124,9 +127,10 @@ void quotation()
             marca--;
             break;
         }
-
+        int findedCars=0;
         do
         {
+            
             system("clear");
             printf("********** Carros Disponibles **********\n");
             printf(" ID \t Marca %5sSub-Marca  Modelo","");
@@ -135,11 +139,20 @@ void quotation()
             {
                 if((cars[i].status)&&(cars[i].idMake==marca))
                 {
+                    findedCars++;
                     printf("%04d\t %-10s ",cars[i].id,makes[cars[i].idMake]);
                     printf("%-10s  %4d",models[cars[i].idMake][cars[i].idModel],cars[i].year);
                     printf("     ");(cars[i].transmission==1)?printf("Estandar  "):printf("Automatico");
                     printf("   %5s","");(cars[i].kidOfCar==1)?printf("Nuevo     \n"):printf("Semi-Usado\n");
                 }
+            }
+            if(findedCars<=0)
+            {
+                system("clear");
+                printf("\nNo se encontraron autos de esta marca...\n");
+                system("pause");
+                system("clear");
+                return;
             }
             printf("\nIngrese el Id del auto deseado: ");
             scanf("%d",&carro);
@@ -234,6 +247,7 @@ void quotation()
         continue;
     }while(1);
     totalQuotes++;
+    quotationReport(totalQuotes);
     saveQuotes();
     system("pause");
 }
@@ -241,6 +255,7 @@ void quotation()
 void quotationReport(int id)
 {
     id--;
+    float totalPagar=0;
     float saldoRestante,mensualidad,interes,iva;
     printf("Cotizacion:        %0.5d\n",quotes[id].id);
     printf("Cliente:           %0.5d\t\t    %s %s\n"
@@ -268,8 +283,206 @@ void quotationReport(int id)
         iva=interes*0.16;
         printf("%4d  $  %9.2f   $ %9.2f   ",i,saldoRestante,mensualidad);
         printf("$ %9.2f   $%9.2f\t",interes,iva);
-        printf("%9.2f\n",mensualidad+interes+iva);
+        printf("$%9.2f\n",mensualidad+interes+iva);
         saldoRestante-=mensualidad;
+        totalPagar+=(mensualidad+interes+iva);
+    }
+    printf("\t\t\t\t\t\tTotal a pagar:  $%9.2f\n",totalPagar);
+    system("pause");
+}
+
+void clientsQuotes()
+{
+    char name[60];
+    char lastname[60],opc;
+    int id,finded=0;
+    do
+    {
+        system("clear");
+        fflush(stdin);
+        printf("1. Mostrar todos los clientes\n2. Buscar por nombre u apellido.\n");
+        printf("Seleccione una opcion: ");
+        fflush(stdin);
+        scanf("%c",&opc);
+        if(opc!='1'&&opc!='2')
+        {
+            printf("Opcion no valida...\n");
+            system("pause");
+            continue;
+        }
+        break;
+    }
+    while(1);
+
+    system("clear");
+    if(opc=='1')
+        clientsLists();
+    else if(opc=='2')
+    {
+        printf("Ingrese el nombre y/o apellido ");
+        printf("(Ingrese un espacio y punto si solo ingresa uno de los 2): ");
+        scanf("%s %s",name,lastname);
+        for(i=0;i<totalClients;i++)
+        {
+            if((strcmp(name,clients[i].name)==0)&&(clients[i].status))
+            {
+                printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+                finded++;
+            }
+            else if((strcmp(lastname,clients[i].lastname)==0)&&(clients[i].status))
+            {
+                printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+                finded++;
+
+            }
+            else if((strcmp(name,clients[i].lastname)==0)&&(clients[i].status))
+            {
+                printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+                finded++;
+            }
+            else if((strcmp(lastname,clients[i].name)==0)&&(clients[i].status))
+            {
+                printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+                finded++;
+            }
+        }
     }
     
+    if(finded>0||opc=='1')
+    {
+        printf("\nIngresa el Id: ");
+        scanf("%d",&id);
+        system("clear");
+        for(i=0;i<totalClients;i++)
+        {
+            if(id==clients[i].id)
+            {
+                if(clients[i].status==1)
+                {
+                    printf("Clave Cliente: %0.5d\n",clients[id-1].id);
+                    printf("Nombre:        %s %s\n",clients[id-1].name,clients[id-1].lastname);
+                    printf("Correo:        %s\t Telefono: %s\n",clients[id-1].email,clients[id-1].phoneNum);
+                    printf("Direccion:     %s ",clients[id-1].home.calle);
+                    printf("%d, %s, CP. ",clients[id-1].home.numero,clients[id-1].home.colonia);
+                    printf("%d\n\n",clients[id-1].home.cp);
+                    printf("\t Cotizaciones\n");
+                    printf("Id Cotizacion   Descripcion Vehiculo\t        Monto a Financiar   ");
+                    printf("Plazo Total a Pagar\n");
+                    for(j=0;j<totalQuotes;j++)
+                    {
+                        if(clients[id-1].id==quotes[j].clientId)
+                        {
+                            printf("    %0.5d\t",quotes[j].id);
+                            printf("%-10s %-10s ",
+                            makes[quotes[j].idMake],models[quotes[j].idMake][quotes[j].idModel]);
+                            printf("%4d \t",quotes[j].year);
+                            printf("  $ %9.2f\t\t %d meses\n",quotes[j].totalPay,quotes[j].pay.period);
+                        }
+                    }
+                    
+                }
+                else
+                {
+                    printf("El cliente esta deshabilitado...\n");
+                    break;
+                }
+            }
+        }
+        system("pause");
+        /*
+        printf("Ingresa el id de la cotizacion a mostrar: ");
+        scanf("%d",&id);
+        system("clear");
+        quotationReport(id);
+        */
+    }
+    else
+    {
+        printf("\nNo se encontraron coincidencias...\n");
+        system("pause");
+        system("clear");
+    }
+}
+
+/* Disable client esta aqui ya que da error por duplicacion y falta de variables */
+void disableClient()
+{
+    char name[60];
+    char lastname[60];
+    int id,finded=0;
+    system("clear");
+    printf("Ingrese el nombre y/o apellido ");
+    printf("(Ingrese un espacio y punto si solo ingresa uno de los 2): ");
+    scanf("%s %s",name,lastname);
+    for(i=0;i<totalClients;i++)
+    {
+        if(strcmp(name,clients[i].name)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+        }
+        else if(strcmp(lastname,clients[i].lastname)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+
+        }
+        else if(strcmp(name,clients[i].lastname)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+        }
+        else if(strcmp(lastname,clients[i].name)==0)
+        {
+            printf("%04d\t%s %s\n",clients[i].id,clients[i].name,clients[i].lastname);
+            finded++;
+        }
+    }
+
+    if(finded>0)
+    {
+        printf("\nIngresa el Id: ");
+        scanf("%d",&id);
+        for(i=0;i<totalClients;i++)
+        {
+            if(id==clients[i].id)
+            {
+                if(clients[i].status==0)
+                {
+                    printf("El cliente ya estaba deshabilitado...\n");
+                    system("pause");
+                    system("clear");
+                }
+                else
+                {
+                    for(j=0;j<totalQuotes;j++)
+                    {
+                        if(id==quotes[j].clientId)
+                        {
+                            printf("\nEl cliente tiene cotizaciones activas");
+                            printf(", no se puede deshabilitar...\n");
+                            system("pause");
+                            break;
+                        }
+                        else
+                        {
+                            clients[i].status=0;
+                            printf("Cliente deshabilitado...\n");
+                            system("pause");
+                            system("clear");
+                            break;
+                        }
+                    }
+                }
+                break;
+            }
+        }
+    }
+    else
+    {
+        printf("\nNo se encontraron coincidencias...\n");
+        system("pause");
+        system("clear");
+    }
+    saveClients();
 }
