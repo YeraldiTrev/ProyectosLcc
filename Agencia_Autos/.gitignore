@@ -1,0 +1,7 @@
+#Carpetas.
+\.vscode
+
+# Extensiones. 
+main.exe
+*.pdf
+*.docx
