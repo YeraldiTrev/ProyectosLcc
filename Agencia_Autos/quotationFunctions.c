@@ -83,7 +83,7 @@ void quotation()
     time_t t=time(NULL);
     struct tm tiempoLocal = *localtime(&t);
     strftime(quotes[totalQuotes].date,sizeof(quotes[totalQuotes].date),dateFormat,&tiempoLocal);
-    int i,carro,selected=0,period,seguro,tipoPago;
+    int i,carro,selected=0,period,seguro,tipoPago,cliente;
     char opc;
     do
     {
@@ -95,17 +95,18 @@ void quotation()
             scanf("%d",&quotes[totalQuotes].clientId);
             for(i=0;i<totalClients;i++)
             {
-                if(quotes[totalQuotes].clientId==clients[i].id)
+                if((quotes[totalQuotes].clientId==clients[i].id)&&(clients[i].status))
                     break;
             }
-            if(quotes[totalQuotes].clientId==clients[i].id)
+            if((quotes[totalQuotes].clientId==clients[i].id)&&(clients[i].status))
                 break;
             else
             {
-                printf("Ingrese 1 si quiere intentar con otra clave o 2 para cancelar: ");
+                printf("Cliente no encontrado o deshabiltado\n");
+                printf("Presiona 1 para intentar con otra clave y 2 para cancelar: ");
                 scanf("%d",&i);
                 if(i==2)
-                    break;;
+                    break;
             }
         }while(1);
         int marca;
@@ -180,7 +181,7 @@ void quotation()
         quotes[totalQuotes].pay.engage=cars[selected].listprice*ENGAGE;
         quotes[totalQuotes].pay.restPrice=cars[selected].listprice-quotes[totalQuotes].pay.engage;
         printf("Enganche minimo solicitado: $%.2f\n",quotes[totalQuotes].pay.engage);
-        printf("Monto a financiar: $%2.f\n",quotes[totalQuotes].pay.restPrice);
+        printf("Monto a financiar: $%.2f\n",quotes[totalQuotes].pay.restPrice);
         do
         {
             printf("\tPeriodos de Pago Disponibles\n");
@@ -237,7 +238,7 @@ void quotation()
         quotes[totalQuotes].totalPay=quotes[totalQuotes].pay.restPrice;
         if(quotes[totalQuotes].insurance.paymentType==2)
             quotes[totalQuotes].totalPay+=quotes[totalQuotes].insurance.price;
-        printf("Monto toal a financiar: %.2f\n",quotes[totalQuotes].totalPay);
+        printf("Monto total a financiar: $%.2f\n",quotes[totalQuotes].totalPay);
         printf("Presione 1 para confirmar o 2 para modificar: ");
         fflush(stdin);
         scanf("%c",&opc);
@@ -249,7 +250,6 @@ void quotation()
     totalQuotes++;
     quotationReport(totalQuotes);
     saveQuotes();
-    system("pause");
 }
 
 void quotationReport(int id)
@@ -485,4 +485,33 @@ void disableClient()
         system("clear");
     }
     saveClients();
+}
+
+void quotesList()
+{
+    int idcot;
+    do
+    {
+        system("clear");
+        printf("\t\t Cotizaciones\n\n");
+        printf("Cotizacion    Marca      Sub-Marca    Modelo   Cliente\n");
+        for(i=0;i<totalQuotes;i++)
+        {
+            printf("   %05d      %-10s %-10s    ",
+            quotes[i].id,makes[quotes[i].idMake],models[quotes[i].idMake][quotes[i].idModel]);
+            printf("%4d    ",quotes[i].year);
+            printf("%s %s\n",clients[quotes[i].clientId-1].name,clients[quotes[i].clientId-1].lastname);
+        }
+        printf("Id cotizacion: ");
+        scanf("%d",&idcot);
+        if((idcot<1)||(idcot>(totalQuotes)))
+        {
+            printf("Cotizacion no encontrada...\n");
+            system("pause");
+            continue;
+        }
+        break;
+    }while(1);
+    system("clear");
+    quotationReport(idcot);
 }

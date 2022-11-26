@@ -210,9 +210,81 @@ void carsList()
         printf("     ");(cars[i].transmission==1)?printf("Estandar  "):printf("Automatico");
         printf("   %5s","");(cars[i].kidOfCar==1)?printf("Nuevo     \n"):printf("Semi-Usado\n");
     }
+    system("pause");
+}
+
+
+void carsFilterMakeList()
+{
+    int marca;
+    do
+    {
+        system("clear");
+        printf("********* Marcas *********\n");
+        for (i=0;i<4;i++)
+            printf("%d.- %s.\n",i+1,makes[i]);
+        printf("Seleccione la marca del vehiculo: ");
+        scanf("%d",&marca);
+        if(marca<1&&marca>4)
+        {
+            printf("Marca no valida...\n");
+            system("pause");
+            continue;
+        }
+        break;
+    }while(1);
+    system("clear");
+    marca--;
+    printf("\t\t Listado de Alojamiento.\n");
+    printf("Marca: %s\n",makes[marca]);
+    printf(" ID    Submarca    Modelo   Transmision   Antiguedad\n");
+    for(i=0;i<totalCars;i++)
+    {
+        if(cars[i].idMake==(marca))
+        {
+            printf("%04d   %-10s   %4d ",cars[i].id,models[cars[i].idMake][cars[i].idModel],cars[i].year);
+            printf("    ");(cars[i].transmission==1)?printf("Estandar  "):printf("Automatico");
+            printf("%4s","");(cars[i].kidOfCar==1)?printf("Nuevo\n"):printf("Semi-Usado\n");
+        }
+    }
+    system("pause");
+}
+
+void carsFilterModelList()
+{
+    int year;
+    do
+    {
+        system("clear");
+        printf("Ingresa el a%co de consulta: ",164);
+        scanf("%d",&year);
+        if(year<1980&&year>2023)
+        {
+            printf("Ingresa un modelo valido...\n");
+            system("pause");
+            continue;
+        }
+        break;
+    }while(1);
+    system("clear");
+    printf("\t\t Automoviles Modelo %d\n\n",year);
+    printf(" ID \t Marca %5sSub-Marca  Modelo","");
+    printf("   Transmision   Estado del Vehiculo\n");
+    for(i=0;i<totalCars;i++)
+    {
+        if((year==cars[i].year)&&(cars[i].status))
+        {
+            printf("%04d     %-10s %-10s  %4d ",cars[i].id,
+            makes[cars[i].idMake],models[cars[i].idMake][cars[i].idModel],cars[i].year);
+            printf("    ");(cars[i].transmission==1)?printf("Estandar  "):printf("Automatico");
+            printf("%4s","");(cars[i].kidOfCar==1)?printf("Nuevo\n"):printf("Semi-Usado\n");
+        }
+    }
+    system("pause");
 }
 
 void ableCar(int carId)
 {
     cars[carId].status=1;
+    saveCars();
 }
