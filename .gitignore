@@ -2,6 +2,6 @@
 \.vscode
 
 # Extensiones. 
-*.exe
+main.exe
 *.pdf
 *.docx
